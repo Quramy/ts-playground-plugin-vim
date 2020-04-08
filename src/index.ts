@@ -1,35 +1,68 @@
 import type { PlaygroundPlugin, PluginUtils } from "./vendor/playground"
+import type { Sandbox } from "./vendor/sandbox";
+import { initVimMode } from "./vim-monaco";
+
+let vimMode;
+let vimStatus: HTMLDivElement;
+
+console.log("TypeScript Playground vim");
+
+function startVimMode(sandbox: Sandbox) {
+  if (!vimStatus) {
+    vimStatus = document.createElement("div");
+    vimStatus.style.position = "fixed";
+    vimStatus.style.backgroundColor = "#fff";
+    vimStatus.style.bottom = "4px";
+    vimStatus.style.padding = "4px 8px";
+    document.body.appendChild(vimStatus);
+  } else {
+    vimStatus.style.display = "block";
+  }
+  vimMode = initVimMode(sandbox.editor, vimStatus);
+  localStorage.setItem("tsplayvim", "activated");
+}
+
+function stopVimMode() {
+  if (vimStatus) {
+    vimStatus.style.display = "none";
+  }
+  if (vimMode) {
+    vimMode.dispose();
+  }
+  vimMode = null;
+  localStorage.removeItem("tsplayvim");
+}
 
 const makePlugin = (utils: PluginUtils) => {
   const customPlugin: PlaygroundPlugin = {
-    id: 'example',
-    displayName: 'Dev Example',
+    id: 'ts-playground-vim',
+    displayName: 'Vim',
     didMount: (sandbox, container) => {
-      console.log('Showing new plugin')
 
       const p = (str: string) => utils.el(str, "p", container);
-      const h4 = (str: string) => utils.el(str, "h4", container);
-
-      h4("Example Plugin")
-
-      p("This plugin has a button which changes the text in the editor, click below to test it.")
-
-      const startButton = document.createElement('input')
-      startButton.type = 'button'
-      startButton.value = 'Change the code in the editor'
+      p("This plugin provides Vim keybindings to the editor.")
+      
+      const startButton = document.createElement('button')
+      startButton.style.fontSize = "16px";
+      startButton.style.cursor = "pointer";
+      startButton.style.padding = "4px 8px";
+      startButton.innerText = "Use vim mode";
       container.appendChild(startButton)
 
-      startButton.onclick = () => {
-        sandbox.setText('// You clicked the button!')
+      if (localStorage.getItem("tsplayvim")) {
+        startVimMode(sandbox);
+        startButton.innerText = "Stop vim mode";
       }
-    },
 
-    // This is called occasionally as text changes in monaco,
-    // it does not directly map 1 keyup to once run of the function
-    // because it is intentionally called at most once every 0.3 seconds
-    // and then will always run at the end.
-    modelChangedDebounce: async (_sandbox, _model) => {
-      // Do some work with the new text
+      startButton.onclick = () => {
+        if (!vimMode) {
+          startVimMode(sandbox);
+          startButton.innerText = "Stop vim mode";
+        } else {
+          stopVimMode();
+          startButton.innerText = "Use vim mode";
+        }
+      }
     },
 
     // Gives you a chance to remove anything set up,

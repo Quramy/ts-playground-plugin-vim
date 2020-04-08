@@ -25,6 +25,7 @@
     "typescript": "latest"
   },
   "dependencies": {
+    "monaco-vim": "^0.1.7",
     "tslib": "^1.10.0"
   }
 }

@@ -1,6 +1,6 @@
-## TypeScript Playground Plugin
+## TypeScript Playground Vim Plugin
 
-My new plugin for the TypeScript playground.
+Provides Vim keybindings for TypeScript Playground editor.
 
 ## Running this plugin
 

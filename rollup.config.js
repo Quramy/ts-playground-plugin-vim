@@ -10,13 +10,13 @@ export default rootFiles.map(name => {
   /** @type { import("rollup").RollupOptions } */
   const options = {
     input: `src/${name}`,
-    external: ['typescript'],
+    external: ['typescript', 'monaco-editor'],
     output: {
       name,
       dir: 'dist',
       format: 'amd',
     },
-    plugins: [typescript({ tsconfig: 'tsconfig.json' }), commonjs(), node(), json()],
+    plugins: [typescript({ tsconfig: 'tsconfig.json', noEmitOnError: false }), commonjs(), node(), json()],
   }
 
   return options
