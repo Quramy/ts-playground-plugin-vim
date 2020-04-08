@@ -33,6 +33,11 @@ function stopVimMode() {
   localStorage.removeItem("tsplayvim");
 }
 
+if ("sandbox" in globalThis && !!localStorage.getItem("tsplayvim")) {
+  const sandbox = (globalThis as unknown as { sandbox: Sandbox }).sandbox;
+  startVimMode(sandbox);
+}
+
 const makePlugin = (utils: PluginUtils) => {
   const customPlugin: PlaygroundPlugin = {
     id: 'ts-playground-vim',
