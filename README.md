@@ -4,7 +4,7 @@ Provides Vim keybindings for TypeScript Playground editor.
 
 ## Running this plugin
 
-- [Click this link](https://typescriptlang.org/play?install-plugin=ts-playground-plugin-vim) to install
+- [Click this link](https://www.typescriptlang.org/v2/play?install-plugin=ts-playground-plugin-vim) to install
 
 or
 
