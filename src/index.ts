@@ -5,20 +5,24 @@ import { initVimMode } from "./vim-monaco";
 let vimMode;
 let vimStatus: HTMLDivElement;
 
-console.log("TypeScript Playground vim");
-
 function startVimMode(sandbox: Sandbox) {
+  const mainNode = document.querySelector('main');
   if (!vimStatus) {
     vimStatus = document.createElement("div");
-    vimStatus.style.position = "fixed";
-    vimStatus.style.backgroundColor = "#fff";
-    vimStatus.style.bottom = "4px";
-    vimStatus.style.padding = "4px 8px";
-    document.body.appendChild(vimStatus);
+    vimStatus.style.position = "absolute";
+    vimStatus.style.bottom = ".4rem";
+    vimStatus.style.left = "1rem";
+    vimStatus.style.fontSize = "small";
+    if (mainNode) {
+      mainNode.appendChild(vimStatus);
+      mainNode.style.position = "relative";
+    }
   } else {
     vimStatus.style.display = "block";
   }
-  vimMode = initVimMode(sandbox.editor, vimStatus);
+  if (!vimMode) {
+    vimMode = initVimMode(sandbox.editor, vimStatus);
+  }
   localStorage.setItem("tsplayvim", "activated");
 }
 
@@ -56,24 +60,18 @@ const makePlugin = (utils: PluginUtils) => {
 
       if (localStorage.getItem("tsplayvim")) {
         startVimMode(sandbox);
-        startButton.innerText = "Stop vim mode";
+        startButton.innerText = "Stop Vim mode";
       }
 
       startButton.onclick = () => {
         if (!vimMode) {
           startVimMode(sandbox);
-          startButton.innerText = "Stop vim mode";
+          startButton.innerText = "Stop Vim mode";
         } else {
           stopVimMode();
-          startButton.innerText = "Use vim mode";
+          startButton.innerText = "Use Vim mode";
         }
       }
-    },
-
-    // Gives you a chance to remove anything set up,
-    // the container itself if wiped of children after this.
-    didUnmount: () => {
-      console.log('Removing plugin')
     },
   }
 
