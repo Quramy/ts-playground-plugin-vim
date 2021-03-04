@@ -9,9 +9,7 @@
   "scripts": {
     "build": "rollup -c rollup.config.js;",
     "compile": "tsc",
-    "start": "concurrently -p \"[{name}]\" -n \"ROLLUP,SITE\" -c \"bgBlue.bold,bgMagenta.bold\" \"yarn rollup -c rollup.config.js --watch\" \"yarn serve dist\"",
-    "prepublish": "yarn build",
-    "postinstall": "yarn build"
+    "start": "concurrently -p \"[{name}]\" -n \"ROLLUP,SITE\" -c \"bgBlue.bold,bgMagenta.bold\" \"yarn rollup -c rollup.config.js --watch\" \"yarn serve dist\""
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",
